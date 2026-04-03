@@ -54,12 +54,12 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       env:
-        BASE_URL: ${{ secrets.BASE_URL }}
+        BASE_URL_BLAZEDEMO: ${{ secrets.BASE_URL }}
         DB_HOST: 127.0.0.1        # ✅ hardcoded - MySQL service runs on runner itself
         DB_PORT: 3306             # ✅ hardcoded
         DB_USER: root             # ✅ hardcoded
         DB_PASSWORD: ''           # ✅ blank - no password set
-        DB_NAME: testdata_db_two  # ✅ hardcoded
+        DB_NAME_TWO: testdata_db_two  # ✅ hardcoded
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
