@@ -1,0 +1,68 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: testdata_db_two
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      # ✅ NEW - Seed MySQL with test data
+    - name: Seed MySQL test data
+      run: |
+        mysql -h 127.0.0.1 -P 3306 -u root --password="" testdata_db_two <<EOF
+        CREATE TABLE IF NOT EXISTS user_data_two (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          fullname VARCHAR(100) NOT NULL,
+          address VARCHAR(100) NOT NULL,
+          city VARCHAR(100) NOT NULL,
+          state VARCHAR(100) NOT NULL,
+          zipcode VARCHAR(100) NOT NULL,
+          ccnumber VARCHAR(100) NOT NULL,
+          ccmonth VARCHAR(10) NOT NULL,
+          ccyear VARCHAR(10) NOT NULL,
+          nameoncard VARCHAR(100) NOT NULL
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        INSERT INTO user_data_two (fullname,address,city,state,zipcode,ccnumber,ccmonth,ccyear,nameoncard)
+        VALUES ('Manorama Sahoo','Lane1','Bangalore','Karnataka',556699,12212121212,4,2026,'Manorama Sahoo');
+        EOF
+    - name: Run Playwright tests
+      run: npx playwright test
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        DB_HOST: 127.0.0.1        # ✅ hardcoded - MySQL service runs on runner itself
+        DB_PORT: 3306             # ✅ hardcoded
+        DB_USER: root             # ✅ hardcoded
+        DB_PASSWORD: ''           # ✅ blank - no password set
+        DB_NAME: testdata_db_two  # ✅ hardcoded
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
