@@ -45,11 +45,11 @@ jobs:
           ccnumber VARCHAR(100) NOT NULL,
           ccmonth VARCHAR(10) NOT NULL,
           ccyear VARCHAR(10) NOT NULL,
-          nameoncard VARCHAR(100) NOT NULL
+          nameoncard VARCHAR(100) NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         INSERT INTO user_data_two (fullname,address,city,state,zipcode,ccnumber,ccmonth,ccyear,nameoncard)
-        VALUES ('Manorama Sahoo','Lane1','Bangalore','Karnataka',556699,12212121212,4,2026,'Manorama Sahoo');
+        VALUES ('Manorama Sahoo','Lane1','Bangalore','Karnataka','556699','12212121212','4','2026','Manorama Sahoo');
         EOF
     - name: Run Playwright tests
       run: npx playwright test
