@@ -10,7 +10,7 @@ class HomePage{
         await expect(this.page.locator(this.findFlightButton)).toBeVisible()
     }
     async chooseDepartureAndDestinationCities(){
-        await this.page.locator(this.departureCity).selectOption({label:"Boston"})
+        await this.page.locator(this.departureCity).selectOption({label:'Boston'})
         await this.page.locator(this.destinationCity).selectOption({label:'New York'})
     }
     async clickFindFlight(){

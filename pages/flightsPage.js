@@ -1,9 +1,8 @@
 const {expect} = require('@playwright/test')
-class FlightPage{
+class FlightsPage{
     constructor(page){
         this.page = page
         this.travelWorldText = '//a[normalize-space()="Travel The World"]'
-        // this.chooseFlightButton = '//form[@name="AL969"]/../td/input[@value="Choose This Flight"]'
     }
 
     async verifyChooseFlightPage(){
@@ -15,4 +14,4 @@ class FlightPage{
     }
 }
 
-module.exports = FlightPage
+module.exports = FlightsPage

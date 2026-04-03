@@ -2,13 +2,13 @@ const {expect} = require('@playwright/test')
 class PurchasePage{
     constructor(page){
         this.page = page
-        this.message = '//*[contains(text(),"message")]'
-        this.purchaseFLightButton = 'input[value="Purchase Flight"]'
+        this.purchaseFlightButton = 'input[value="Purchase Flight"]'
     }
 
     async verifyMessage(expectedMessage){
-        await expect(this.page.locator(this.message.replace("message",expectedMessage))).toBeVisible()
+        await expect(this.page.locator(`//*[contains(text(),"${expectedMessage}")]`)).toBeVisible()
     }
+
     async bookAFlight(data){
         const fields ={
             inputName: data.fullname,
@@ -25,8 +25,9 @@ class PurchasePage{
             await this.page.locator(`input[id="${fieldId}"]`).fill(value)
         }
     }
+
     async clickPurchaseFlight(){
-        await this.page.locator(this.purchaseFLightButton).click()
+        await this.page.locator(this.purchaseFlightButton).click()
     }
 }
 module.exports = PurchasePage
