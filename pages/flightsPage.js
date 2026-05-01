@@ -2,11 +2,11 @@ const {expect} = require('@playwright/test')
 class FlightsPage{
     constructor(page){
         this.page = page
-        this.travelWorldText = '//a[normalize-space()="Travel The World"]'
+        this.travelWorldText = this.page.getByText('Travel The World',{exact:true})
     }
 
     async verifyChooseFlightPage(){
-        await expect(this.page.locator(this.travelWorldText)).toBeVisible()
+        await expect(this.travelWorldText).toBeVisible()
     }
 
     async selectSpecificFlight(flightNumber){

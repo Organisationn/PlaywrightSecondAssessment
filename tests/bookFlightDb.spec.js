@@ -6,16 +6,16 @@ const getUserTestData = require('../utils/dbHelper')
 
 let homePage,flightsPage,purchasePage,data
 
-test.describe("BlazeDemo e2e scenario", function () {
-    test.beforeEach(async function ({ page }) {
+test.describe("BlazeDemo e2e scenario", () => {
+    test.beforeEach(async ({ page }) =>{
         await page.goto("/")
-        homePage = new HomePage(page)
-        flightsPage = new FlightsPage(page)
-        purchasePage = new PurchasePage(page)
         data = await getUserTestData(1)
         console.log('Test data loaded from DB : ', data)
     })
-    test("login and book a flight successfully", async function ({ page }) {
+    test("book a flight successfully", async ({ page }) => {
+        homePage = new HomePage(page)
+        flightsPage = new FlightsPage(page)
+        purchasePage = new PurchasePage(page)
         await homePage.verifyHomePage()
         await homePage.chooseDepartureAndDestinationCities()
         await homePage.clickFindFlight()

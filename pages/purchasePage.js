@@ -2,7 +2,7 @@ const {expect} = require('@playwright/test')
 class PurchasePage{
     constructor(page){
         this.page = page
-        this.purchaseFlightButton = 'input[value="Purchase Flight"]'
+        this.purchaseFlightButton = this.page.getByRole('button',{name:'Purchase Flight'})
     }
 
     async verifyMessage(expectedMessage){
@@ -12,14 +12,14 @@ class PurchasePage{
     async bookAFlight(data){
         const fields ={
             inputName: data.fullname,
-            address:data.address,
-            city:data.city,
-            state:data.state,
-            zipCode:data.zipcode,
-            creditCardNumber:data.ccnumber,
-            creditCardMonth : data.ccmonth,
-            creditCardYear :data.ccyear,
-            nameOnCard:data.nameoncard
+            address: data.address,
+            city: data.city,
+            state: data.state,
+            zipCode: data.zipcode,
+            creditCardNumber: data.ccnumber,
+            creditCardMonth: data.ccmonth,
+            creditCardYear: data.ccyear,
+            nameOnCard: data.nameoncard
         }
         for(const [fieldId,value] of Object.entries(fields)){
             await this.page.locator(`input[id="${fieldId}"]`).fill(value)
@@ -27,7 +27,7 @@ class PurchasePage{
     }
 
     async clickPurchaseFlight(){
-        await this.page.locator(this.purchaseFlightButton).click()
+        await this.purchaseFlightButton.click()
     }
 }
 module.exports = PurchasePage
